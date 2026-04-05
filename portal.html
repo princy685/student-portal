@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KVN College — EduPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS & RESET
+═══════════════════════════════════════════════ */
+:root {
+  --bg0:       #0b0f1a;
+  --bg1:       #111827;
+  --bg2:       #1a2235;
+  --bg3:       #1f2d44;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+  --text1:     #f0f4ff;
+  --text2:     #9ba8be;
+  --text3:     #5c6a82;
+  --indigo:    #6366f1;
+  --indigo-lt: #818cf8;
+  --indigo-dk: #4338ca;
+  --amber:     #f59e0b;
+  --amber-lt:  #fbbf24;
+  --green:     #10b981;
+  --red:       #ef4444;
+  --cyan:      #06b6d4;
+  --pink:      #ec4899;
+  --sidebar-w: 256px;
+  --topbar-h:  64px;
+  --radius:    12px;
+  --radius-sm: 8px;
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.6);
+  --transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"] {
+  --bg0:    #f1f5fb;
+  --bg1:    #ffffff;
+  --bg2:    #f8fafc;
+  --bg3:    #e8edf6;
+  --border: rgba(0,0,0,0.07);
+  --border2:rgba(0,0,0,0.12);
+  --text1:  #0f172a;
+  --text2:  #475569;
+  --text3:  #94a3b8;
+}
+ 
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Source Sans 3',sans-serif;
+  background:var(--bg0);
+  color:var(--text1);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,select{font-family:inherit;outline:none}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+ 
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:rgba(99,102,241,0.6)}
+ 
+/* ═══════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════ */
+.hidden{display:none!important}
+.flex{display:flex}
+.flex-col{display:flex;flex-direction:column}
+.items-center{align-items:center}
+.justify-between{justify-content:space-between}
+.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.font-mono{font-family:'JetBrains Mono',monospace}
+.font-display{font-family:'Outfit',sans-serif}
+.text-muted{color:var(--text2)}
+.text-faint{color:var(--text3)}
+.text-indigo{color:var(--indigo-lt)}
+.text-green{color:var(--green)}
+.text-red{color:var(--red)}
+.text-amber{color:var(--amber-lt)}
+.text-cyan{color:var(--cyan)}
+.fw-600{font-weight:600}
+.fw-700{font-weight:700}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ 
+/* ═══════════════════════════════════════════════
+   PARTICLE CANVAS
+═══════════════════════════════════════════════ */
+#loginCanvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+ 
+/* ═══════════════════════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════════════════════ */
+#loginPage{
+  position:fixed;inset:0;z-index:200;
+  background:var(--bg0);
+  display:flex;align-items:stretch;
+}
+ 
+/* LEFT PANEL */
+.login-left{
+  flex:1;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  background: linear-gradient(135deg, #0b0f1a 0%, #0f1829 40%, #131e35 100%);
+}
+.login-left-inner{
+  position:relative;z-index:2;
+  text-align:center;padding:40px;
+  animation:fadeUp 0.8s ease both;
+}
+.login-brand-icon{
+  width:72px;height:72px;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--indigo),var(--pink));
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:28px;font-weight:900;color:#fff;
+  box-shadow:0 8px 32px rgba(99,102,241,0.4);
+  letter-spacing:-1px;
+}
+.login-left h1{
+  font-family:'Outfit',sans-serif;font-size:38px;font-weight:800;
+  color:#fff;line-height:1.1;
+  background:linear-gradient(135deg,#fff 30%,var(--indigo-lt));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.login-left p{color:var(--text2);font-size:15px;margin-top:12px;line-height:1.6;max-width:340px;margin-inline:auto}
+.login-features{
+  margin-top:40px;display:flex;flex-direction:column;gap:14px;text-align:left;max-width:300px;margin-inline:auto;
+}
+.login-feature{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:12px 16px;
+  animation:fadeUp 0.8s ease both;
+}
+.login-feature:nth-child(2){animation-delay:0.1s}
+.login-feature:nth-child(3){animation-delay:0.2s}
+.login-feature:nth-child(4){animation-delay:0.3s}
+.lf-icon{font-size:20px;flex-shrink:0}
+.lf-text{font-size:13px;color:var(--text2);font-weight:500}
+.login-deco{
+  position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+}
+.deco-circle{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,0.15),transparent 70%);
+}
+.deco-c1{width:500px;height:500px;top:-100px;right:-150px}
+.deco-c2{width:300px;height:300px;bottom:50px;left:-80px;background:radial-gradient(circle,rgba(236,72,153,0.1),transparent 70%)}
+ 
+/* RIGHT PANEL */
+.login-right{
+  width:480px;
+  background:var(--bg1);
+  display:flex;align-items:center;justify-content:center;
+  padding:48px 48px;
+  position:relative;z-index:3;
+  flex-shrink:0;
+}
+.login-form-wrap{width:100%;max-width:360px}
+.login-form-wrap h2{
+  font-family:'Outfit',sans-serif;font-size:28px;font-weight:700;
+  margin-bottom:6px;
+}
+.login-form-wrap .sub{font-size:14px;color:var(--text2);margin-bottom:32px}
+.login-form-wrap .sub span{color:var(--indigo-lt);font-weight:600}
+ 
+/* ROLE SWITCHER */
+.role-tabs{
+  display:flex;background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:4px;gap:4px;margin-bottom:28px;
+}
+.role-tab{
+  flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;
+  border-radius:7px;cursor:pointer;color:var(--text2);
+  transition:var(--transition);
+}
+.role-tab.active{background:var(--indigo);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,0.4)}
+ 
+/* FORM */
+.form-group{margin-bottom:18px;position:relative}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;display:block}
+.form-input{
+  width:100%;background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);padding:13px 44px 13px 16px;
+  font-size:14px;color:var(--text1);
+  transition:var(--transition);
+}
+.form-input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+.form-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,0.1)}
+.input-icon{
+  position:absolute;right:14px;bottom:14px;
+  color:var(--text3);font-size:16px;cursor:pointer;
+  transition:color 0.2s;user-select:none;
+}
+.input-icon:hover{color:var(--text2)}
+.form-error{font-size:12px;color:var(--red);margin-top:5px;display:none}
+.form-error.show{display:block}
+ 
+.form-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.checkbox-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.checkbox-wrap input{width:16px;height:16px;accent-color:var(--indigo);cursor:pointer}
+.checkbox-wrap span{font-size:13px;color:var(--text2)}
+.forgot-link{font-size:13px;color:var(--indigo-lt);font-weight:600;cursor:pointer}
+.forgot-link:hover{text-decoration:underline}
+ 
+.btn-login{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--indigo),var(--indigo-dk));
+  color:#fff;font-size:15px;font-weight:700;font-family:'Outfit',sans-serif;
+  border-radius:var(--radius-sm);
+  box-shadow:0 4px 16px rgba(99,102,241,0.35);
+  transition:var(--transition);
+  position:relative;overflow:hidden;
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,0.5)}
+.btn-login:active{transform:translateY(0)}
+.btn-login.loading{pointer-events:none;opacity:0.8}
+.btn-login .btn-text{transition:opacity 0.2s}
+.btn-login .btn-spinner{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.2s;
+}
+.btn-login.loading .btn-text{opacity:0}
+.btn-login.loading .btn-spinner{opacity:1}
+.spinner{
+  width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin 0.7s linear infinite;
+}
+ 
+.login-divider{
+  display:flex;align-items:center;gap:12px;margin:24px 0;
+}
+.login-divider::before,.login-divider::after{
+  content:'';flex:1;height:1px;background:var(--border2);
+}
+.login-divider span{font-size:12px;color:var(--text3)}
+ 
+.demo-creds{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.demo-btn{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  font-size:12px;color:var(--text2);font-weight:500;
+  transition:var(--transition);text-align:left;
+}
+.demo-btn:hover{border-color:var(--indigo);color:var(--indigo-lt);background:rgba(99,102,241,0.08)}
+.demo-btn strong{display:block;font-size:13px;color:var(--text1);margin-bottom:2px}
+ 
+/* ═══════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════ */
+#appShell{display:none}
+#appShell.visible{display:flex;min-height:100vh}
+ 
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--bg1);
+  border-right:1px solid var(--border);
+  position:fixed;left:0;top:0;bottom:0;
+  display:flex;flex-direction:column;
+  z-index:100;
+  transition:var(--transition);
+  overflow:hidden;
+}
+.sidebar.collapsed{width:64px}
+ 
+.sb-header{
+  padding:20px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+  min-height:var(--topbar-h);flex-shrink:0;
+}
+.sb-logo{
+  width:36px;height:36px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--indigo),var(--pink));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:900;color:#fff;
+  box-shadow:0 4px 12px rgba(99,102,241,0.35);
+}
+.sb-title{overflow:hidden;transition:var(--transition)}
+.sb-title h2{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;white-space:nowrap}
+.sb-title p{font-size:11px;color:var(--text3);white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.sidebar.collapsed .sb-title{opacity:0;width:0}
+ 
+.sb-nav{flex:1;overflow-y:auto;padding:12px 0}
+.sb-section{
+  font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text3);padding:16px 18px 6px;
+  transition:var(--transition);white-space:nowrap;
+}
+.sidebar.collapsed .sb-section{opacity:0}
+.sb-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 18px;margin:1px 8px;
+  color:var(--text2);cursor:pointer;
+  border-radius:var(--radius-sm);
+  transition:var(--transition);
+  position:relative;white-space:nowrap;
+  font-size:14px;font-weight:500;
+}
+.sb-item:hover{color:var(--text1);background:var(--bg3)}
+.sb-item.active{color:var(--indigo-lt);background:rgba(99,102,241,0.12)}
+.sb-item.active::before{
+  content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;background:var(--indigo);border-radius:0 3px 3px 0;
+}
+.sb-icon{font-size:18px;width:20px;text-align:center;flex-shrink:0}
+.sb-label{transition:var(--transition);overflow:hidden}
+.sidebar.collapsed .sb-label{opacity:0;width:0}
+.sb-badge{
+  margin-left:auto;font-size:10px;font-weight:700;
+  padding:2px 6px;border-radius:20px;flex-shrink:0;
+  transition:var(--transition);
+}
+.sidebar.collapsed .sb-badge{opacity:0}
+.badge-red{background:rgba(239,68,68,0.15);color:var(--red)}
+.badge-amber{background:rgba(245,158,11,0.15);color:var(--amber-lt)}
+.badge-green{background:rgba(16,185,129,0.15);color:var(--green)}
+ 
+.sb-footer{
+  padding:16px;border-top:1px solid var(--border);flex-shrink:0;
+}
+.sb-user{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg2);border-radius:var(--radius-sm);
+  padding:10px 12px;cursor:pointer;
+  transition:var(--transition);
+  border:1px solid var(--border);
+}
+.sb-user:hover{border-color:var(--indigo);background:rgba(99,102,241,0.06)}
+.avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--indigo),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:#fff;
+}
+.sb-user-info{overflow:hidden;flex:1;transition:var(--transition)}
+.sidebar.collapsed .sb-user-info{opacity:0;width:0}
+.sb-user-name{font-size:13px;font-weight:600;white-space:nowrap}
+.sb-user-role{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.sb-collapse-btn{
+  position:absolute;right:-12px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:11px;color:var(--text2);
+  transition:var(--transition);z-index:10;
+}
+.sb-collapse-btn:hover{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.sb-user{position:relative}
+ 
+/* ═══════════════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════════════ */
+.topbar{
+  position:fixed;left:var(--sidebar-w);right:0;top:0;
+  height:var(--topbar-h);z-index:90;
+  background:rgba(11,15,26,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+  transition:left 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+.topbar.collapsed{left:64px}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.page-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700}
+.breadcrumb{font-size:13px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.topbar-right{display:flex;align-items:center;gap:10px}
+ 
+.search-bar{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:8px 14px;
+  width:220px;transition:var(--transition);
+}
+.search-bar:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.1);width:260px}
+.search-bar input{
+  background:none;border:none;color:var(--text1);
+  font-size:13px;width:100%;
+}
+.search-bar input::placeholder{color:var(--text3)}
+.search-bar .s-icon{color:var(--text3);font-size:14px;flex-shrink:0}
+ 
+.icon-btn{
+  width:38px;height:38px;border-radius:var(--radius-sm);
+  background:var(--bg2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;color:var(--text2);
+  transition:var(--transition);position:relative;
+}
+.icon-btn:hover{background:var(--bg3);color:var(--text1)}
+.notif-dot{
+  position:absolute;top:7px;right:7px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);border:1.5px solid var(--bg1);
+}
+.theme-btn{font-size:15px}
+ 
+.topbar-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--indigo),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#fff;
+  cursor:pointer;border:2px solid var(--border2);
+  transition:var(--transition);
+}
+.topbar-avatar:hover{border-color:var(--indigo)}
+ 
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════ */
+.main-content{
+  margin-left:var(--sidebar-w);
+  margin-top:var(--topbar-h);
+  padding:28px;
+  min-height:calc(100vh - var(--topbar-h));
+  flex:1;
+  transition:margin-left 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+.main-content.collapsed{margin-left:64px}
+ 
+/* ═══════════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════════ */
+.page{display:none}
+.page.active{display:block;animation:fadeUp 0.35s ease}
+ 
+/* ═══════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════ */
+.card{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;border-bottom:1px solid var(--border);
+}
+.card-title{
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.ct-icon{font-size:16px}
+.card-action{
+  font-size:12px;color:var(--indigo-lt);font-weight:600;cursor:pointer;
+  padding:5px 10px;border-radius:6px;transition:var(--transition);
+}
+.card-action:hover{background:rgba(99,102,241,0.1)}
+.card-body{padding:20px 22px}
+ 
+/* ═══════════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════════ */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+  position:relative;overflow:hidden;cursor:pointer;
+  transition:var(--transition);
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.stat-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,0.02));
+  pointer-events:none;
+}
+.stat-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.stat-icon-box{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.stat-trend{
+  font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;
+  font-family:'JetBrains Mono',monospace;
+}
+.stat-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.stat-value{font-family:'Outfit',sans-serif;font-size:30px;font-weight:800;line-height:1}
+.stat-sub{font-size:12px;color:var(--text2);margin-top:4px}
+.stat-bar{height:3px;background:var(--bg3);border-radius:3px;margin-top:14px;overflow:hidden}
+.stat-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+ 
+/* ═══════════════════════════════════════════════
+   GRID LAYOUTS
+═══════════════════════════════════════════════ */
+.grid-6-4{display:grid;grid-template-columns:6fr 4fr;gap:20px;margin-bottom:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px}
+ 
+/* ═══════════════════════════════════════════════
+   ATTENDANCE DONUT
+═══════════════════════════════════════════════ */
+.donut-wrap{display:flex;align-items:center;gap:24px;padding:8px 0}
+.donut-svg{width:120px;height:120px;flex-shrink:0}
+.donut-track{fill:none;stroke:var(--bg3);stroke-width:10}
+.donut-fill{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)}
+.donut-center{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;pointer-events:none;
+}
+.donut-rel{position:relative;width:120px;height:120px;flex-shrink:0}
+.donut-pct{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800}
+.donut-sub-lbl{font-size:10px;color:var(--text3);margin-top:1px}
+.attend-rows{flex:1;display:flex;flex-direction:column;gap:8px}
+.att-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+.att-name{font-size:13px;font-weight:500}
+.att-pct{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;text-align:right;min-width:36px}
+.att-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;width:80px}
+.att-fill{height:100%;border-radius:4px}
+ 
+/* ═══════════════════════════════════════════════
+   SCHEDULE TIMELINE
+═══════════════════════════════════════════════ */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;padding:10px 0;position:relative}
+.tl-item:not(:last-child)::after{
+  content:'';position:absolute;left:67px;top:32px;bottom:-10px;
+  width:1px;background:var(--border);
+}
+.tl-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);min-width:44px;padding-top:6px}
+.tl-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:8px;
+  box-shadow:0 0 0 3px var(--bg1),0 0 0 4px currentColor;
+}
+.tl-body{flex:1;min-width:0}
+.tl-sub{font-size:14px;font-weight:600}
+.tl-loc{font-size:12px;color:var(--text2);margin-top:2px}
+.tl-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:5px;
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.tag-done{background:rgba(16,185,129,0.12);color:var(--green)}
+.tag-now{background:rgba(245,158,11,0.12);color:var(--amber-lt)}
+.tag-soon{background:rgba(99,102,241,0.1);color:var(--indigo-lt)}
+.tag-next{background:rgba(255,255,255,0.05);color:var(--text2)}
+ 
+/* ═══════════════════════════════════════════════
+   MARKS TABLE
+═══════════════════════════════════════════════ */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{
+  text-align:left;padding:10px 12px;
+  font-size:11px;text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--text3);font-weight:700;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.data-table th:first-child{border-radius:8px 0 0 0}
+.data-table th:last-child{border-radius:0 8px 0 0}
+.data-table td{
+  padding:12px 12px;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr{transition:background 0.15s}
+.data-table tbody tr:hover{background:var(--bg2)}
+.grade-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;padding:3px 10px;
+  border-radius:20px;display:inline-block;
+}
+.mini-prog{width:70px}
+.mini-prog-track{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.mini-prog-fill{height:100%;border-radius:4px}
+ 
+/* ═══════════════════════════════════════════════
+   NOTICE BOARD
+═══════════════════════════════════════════════ */
+.notice-item{
+  padding:14px 0;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:var(--transition);
+}
+.notice-item:last-child{border:none;padding-bottom:0}
+.notice-item:hover .notice-title{color:var(--indigo-lt)}
+.notice-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.n-tag{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
+  padding:3px 8px;border-radius:5px;
+}
+.n-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)}
+.notice-title{font-size:14px;font-weight:600;margin-bottom:4px;transition:color 0.15s}
+.notice-desc{font-size:12px;color:var(--text2);line-height:1.55}
+.notice-unread{display:flex;align-items:center;gap:6px}
+.unread-dot{width:6px;height:6px;border-radius:50%;background:var(--indigo);flex-shrink:0}
+ 
+/* ═══════════════════════════════════════════════
+   QUICK ACCESS
+═══════════════════════════════════════════════ */
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.quick-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:16px 10px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;transition:var(--transition);text-align:center;
+}
+.quick-item:hover{border-color:var(--indigo);background:rgba(99,102,241,0.08);transform:translateY(-2px)}
+.qi-icon{font-size:22px}
+.qi-label{font-size:11px;color:var(--text2);font-weight:600}
+ 
+/* ═══════════════════════════════════════════════
+   CGPA CHART
+═══════════════════════════════════════════════ */
+.cgpa-chart{margin-top:12px}
+.cgpa-bars-row{display:flex;align-items:flex-end;gap:10px;height:90px}
+.cgpa-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.cgpa-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo-lt);font-weight:700}
+.cgpa-bar{
+  width:100%;border-radius:5px 5px 0 0;
+  background:linear-gradient(180deg,var(--indigo) 0%,rgba(99,102,241,0.4) 100%);
+  transition:height 1s cubic-bezier(0.4,0,0.2,1);cursor:pointer;position:relative;
+}
+.cgpa-bar:hover{filter:brightness(1.2)}
+.cgpa-bar.current{background:linear-gradient(180deg,var(--amber-lt) 0%,rgba(245,158,11,0.4) 100%)}
+.cgpa-sem{font-size:10px;color:var(--text3)}
+ 
+/* ═══════════════════════════════════════════════
+   FEE PAGE
+═══════════════════════════════════════════════ */
+.fee-summary{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;
+}
+.fee-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:22px;
+}
+.fee-amount{font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;margin:8px 0 4px}
+.pay-btn{
+  width:100%;padding:13px;margin-top:16px;
+  background:linear-gradient(135deg,var(--green),#059669);
+  color:#fff;font-size:14px;font-weight:700;font-family:'Outfit',sans-serif;
+  border-radius:var(--radius-sm);
+  box-shadow:0 4px 14px rgba(16,185,129,0.3);
+  transition:var(--transition);
+}
+.pay-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,129,0.4)}
+.pay-history{margin-top:24px}
+.ph-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:var(--bg2);border-radius:var(--radius-sm);
+  margin-bottom:8px;border:1px solid var(--border);
+  transition:var(--transition);cursor:pointer;
+}
+.ph-row:hover{border-color:var(--indigo)}
+.ph-left{display:flex;align-items:center;gap:12px}
+.ph-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  background:rgba(16,185,129,0.1);
+}
+.ph-name{font-size:14px;font-weight:600}
+.ph-date{font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace}
+.ph-amount{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700}
+.ph-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:3px;display:inline-block}
+ 
+/* ═══════════════════════════════════════════════
+   TIMETABLE PAGE
+═══════════════════════════════════════════════ */
+.tt-grid{
+  display:grid;overflow:auto;
+  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+}
+.tt-row{display:contents}
+.tt-head{
+  background:var(--bg2);padding:12px 16px;
+  font-size:12px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.07em;color:var(--text3);
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.tt-time{
+  background:var(--bg2);padding:14px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+}
+.tt-cell{
+  padding:12px 14px;
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  font-size:12px;min-height:60px;
+  transition:background 0.15s;cursor:pointer;
+}
+.tt-cell:hover{background:rgba(99,102,241,0.06)}
+.tt-cell-inner{
+  background:var(--bg2);border-left:3px solid;
+  border-radius:0 6px 6px 0;padding:6px 8px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.tt-sub{font-size:12px;font-weight:700}
+.tt-room{font-size:10px;color:var(--text2);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.tt-cell.break{background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.01) 10px,rgba(255,255,255,0.01) 20px)}
+.tt-break-label{font-size:12px;color:var(--text3);font-weight:600;display:flex;align-items:center;justify-content:center;height:100%}
+ 
+/* ═══════════════════════════════════════════════
+   PROFILE PAGE
+═══════════════════════════════════════════════ */
+.profile-hero{
+  background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(236,72,153,0.08));
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:32px;margin-bottom:24px;display:flex;gap:24px;align-items:center;
+}
+.profile-avatar{
+  width:80px;height:80px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--indigo),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;color:#fff;
+  border:3px solid var(--border2);box-shadow:0 8px 24px rgba(99,102,241,0.3);
+}
+.profile-info h2{font-family:'Outfit',sans-serif;font-size:24px;font-weight:800}
+.profile-info p{font-size:14px;color:var(--text2);margin-top:4px}
+.profile-tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.p-tag{
+  font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;
+  background:rgba(99,102,241,0.12);color:var(--indigo-lt);border:1px solid rgba(99,102,241,0.2);
+}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-row{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:14px 16px;
+}
+.info-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.info-val{font-size:14px;font-weight:600}
+ 
+/* ═══════════════════════════════════════════════
+   ASSIGNMENTS PAGE
+═══════════════════════════════════════════════ */
+.assign-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:12px;
+  display:flex;gap:18px;align-items:flex-start;
+  transition:var(--transition);cursor:pointer;
+}
+.assign-card:hover{border-color:var(--indigo);transform:translateX(4px)}
+.assign-check{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:2px;
+  border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;
+  transition:var(--transition);cursor:pointer;
+}
+.assign-check.done{background:var(--green);border-color:var(--green);color:#fff;font-size:12px}
+.assign-body{flex:1}
+.assign-title{font-size:15px;font-weight:700;margin-bottom:4px;font-family:'Outfit',sans-serif}
+.assign-meta{font-size:12px;color:var(--text2);display:flex;gap:16px;flex-wrap:wrap}
+.assign-due{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;align-self:flex-start;flex-shrink:0;
+}
+.due-urgent{background:rgba(239,68,68,0.12);color:var(--red)}
+.due-soon{background:rgba(245,158,11,0.12);color:var(--amber-lt)}
+.due-ok{background:rgba(16,185,129,0.1);color:var(--green)}
+.assign-progress{
+  display:flex;align-items:center;gap:10px;margin-top:10px;
+}
+.assign-prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.assign-prog-fill{height:100%;border-radius:4px;transition:width 0.8s ease}
+ 
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+#toastContainer{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  display:flex;flex-direction:column;gap:10px;
+}
+.toast{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:14px 18px;
+  box-shadow:var(--shadow-lg);min-width:280px;max-width:360px;
+  animation:toastIn 0.35s cubic-bezier(0.4,0,0.2,1);
+  font-size:14px;font-weight:500;
+}
+.toast.success{border-left:3px solid var(--green)}
+.toast.error{border-left:3px solid var(--red)}
+.toast.info{border-left:3px solid var(--indigo)}
+.toast.warning{border-left:3px solid var(--amber)}
+.toast-icon{font-size:18px;flex-shrink:0}
+.toast-close{margin-left:auto;cursor:pointer;color:var(--text3);font-size:16px}
+ 
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+.modal{
+  background:var(--bg1);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:32px;min-width:420px;max-width:520px;
+  box-shadow:var(--shadow-lg);animation:fadeUp 0.3s ease;
+}
+.modal-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+.btn{
+  padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;
+  font-family:'Outfit',sans-serif;transition:var(--transition);
+}
+.btn-outline{background:transparent;border:1.5px solid var(--border2);color:var(--text2)}
+.btn-outline:hover{border-color:var(--text2);color:var(--text1)}
+.btn-primary{background:var(--indigo);color:#fff;border:none;box-shadow:0 2px 8px rgba(99,102,241,0.3)}
+.btn-primary:hover{background:var(--indigo-dk);box-shadow:0 4px 16px rgba(99,102,241,0.4)}
+ 
+/* ═══════════════════════════════════════════════
+   SKELETON LOADER
+═══════════════════════════════════════════════ */
+.skeleton{
+  background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:6px;
+}
+@keyframes shimmer{to{background-position:-200% 0}}
+ 
+/* ═══════════════════════════════════════════════
+   PROGRESS RING COMPONENT
+═══════════════════════════════════════════════ */
+.prog-ring-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.prog-ring-lbl{font-size:11px;color:var(--text2);font-weight:600}
+ 
+/* ═══════════════════════════════════════════════
+   WELCOME BANNER
+═══════════════════════════════════════════════ */
+.welcome-bar{
+  background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.07));
+  border:1px solid rgba(99,102,241,0.2);border-radius:var(--radius);
+  padding:24px 28px;margin-bottom:24px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.welcome-bar::before{
+  content:'🎓';position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  font-size:64px;opacity:0.08;pointer-events:none;
+}
+.welcome-bar h2{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800}
+.welcome-bar h2 span{color:var(--indigo-lt)}
+.welcome-bar p{font-size:13px;color:var(--text2);margin-top:5px}
+.sem-chip{
+  background:linear-gradient(135deg,var(--indigo),var(--indigo-dk));
+  color:#fff;font-size:12px;font-weight:700;
+  padding:7px 18px;border-radius:20px;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(99,102,241,0.35);font-family:'Outfit',sans-serif;
+}
+ 
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+ 
+/* ═══════════════════════════════════════════════
+   LIGHT THEME OVERRIDES
+═══════════════════════════════════════════════ */
+[data-theme="light"] .topbar{background:rgba(241,245,251,0.9)}
+[data-theme="light"] .login-left{background:linear-gradient(135deg,#1e1b4b,#312e81,#1e1b4b)}
+[data-theme="light"] .login-right{background:#fff}
+ 
+/* RESPONSIVE */
+@media(max-width:1200px){.stats-row{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){
+  .grid-6-4,.grid-2,.grid-3{grid-template-columns:1fr}
+  .login-left{display:none}
+  .login-right{width:100%}
+}
+</style>
+</head>
+<body>
+ 
+<!-- PARTICLE CANVAS -->
+<canvas id="loginCanvas"></canvas>
+ 
+<!-- ═══════════════ LOGIN PAGE ═══════════════ -->
+<div id="loginPage">
+  <div class="login-left">
+    <div class="login-deco">
+      <div class="deco-circle deco-c1"></div>
+      <div class="deco-circle deco-c2"></div>
+    </div>
+    <div class="login-left-inner">
+      <div class="login-brand-icon">KVN</div>
+      <h1>EduPortal<br>2.0</h1>
+      <p>The next-generation student management platform for KVN College of Arts & Science</p>
+      <div class="login-features">
+        <div class="login-feature">
+          <span class="lf-icon">📊</span>
+          <span class="lf-text">Real-time academic analytics & insights</span>
+        </div>
+        <div class="login-feature">
+          <span class="lf-icon">🔔</span>
+          <span class="lf-text">Instant notifications for marks & attendance</span>
+        </div>
+        <div class="login-feature">
+          <span class="lf-icon">💳</span>
+          <span class="lf-text">Seamless online fee payment gateway</span>
+        </div>
+        <div class="login-feature">
+          <span class="lf-icon">🔒</span>
+          <span class="lf-text">Enterprise-grade security & data privacy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <h2>Welcome back 👋</h2>
+      <p class="sub">Sign in to <span>KVN EduPortal</span></p>
+ 
+      <div class="role-tabs">
+        <div class="role-tab active" onclick="setRole(this,'student')">🎓 Student</div>
+        <div class="role-tab" onclick="setRole(this,'faculty')">👨‍🏫 Faculty</div>
+        <div class="role-tab" onclick="setRole(this,'admin')">🛡️ Admin</div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Roll Number / Username</label>
+        <input id="loginUser" class="form-input" type="text" placeholder="e.g. 22CS047" autocomplete="username">
+        <span class="input-icon">👤</span>
+        <div class="form-error" id="userErr">Please enter your roll number</div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input id="loginPass" class="form-input" type="password" placeholder="Enter your password" autocomplete="current-password">
+        <span class="input-icon" id="togglePass" onclick="togglePassword()" title="Show/Hide">🔒</span>
+        <div class="form-error" id="passErr">Password must be at least 4 characters</div>
+      </div>
+ 
+      <div class="form-row">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="rememberMe">
+          <span>Remember me for 30 days</span>
+        </label>
+        <span class="forgot-link" onclick="showForgotModal()">Forgot password?</span>
+      </div>
+ 
+      <button class="btn-login" id="loginBtn" onclick="handleLogin()">
+        <span class="btn-text">Sign In to Portal</span>
+        <span class="btn-spinner"><span class="spinner"></span></span>
+      </button>
+ 
+      <div class="login-divider"><span>Quick Demo Access</span></div>
+      <div class="demo-creds">
+        <button class="demo-btn" onclick="fillDemo('22CS047','pass123')">
+          <strong>Student Demo</strong>
+          Roll: 22CS047 / pass123
+        </button>
+        <button class="demo-btn" onclick="fillDemo('FAC001','faculty1')">
+          <strong>Faculty Demo</strong>
+          ID: FAC001 / faculty1
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════ APP SHELL ═══════════════ -->
+<div id="appShell">
+ 
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <div class="sb-logo">KVN</div>
+      <div class="sb-title">
+        <h2>EduPortal</h2>
+        <p>v2.0.1 · 2024–25</p>
+      </div>
+    </div>
+ 
+    <nav class="sb-nav">
+      <div class="sb-section">Overview</div>
+      <div class="sb-item active" onclick="navigate('dashboard',this)" data-page="dashboard">
+        <span class="sb-icon">🏠</span><span class="sb-label">Dashboard</span>
+      </div>
+      <div class="sb-item" onclick="navigate('profile',this)" data-page="profile">
+        <span class="sb-icon">👤</span><span class="sb-label">My Profile</span>
+      </div>
+ 
+      <div class="sb-section">Academic</div>
+      <div class="sb-item" onclick="navigate('attendance',this)" data-page="attendance">
+        <span class="sb-icon">📋</span><span class="sb-label">Attendance</span>
+        <span class="sb-badge badge-amber">⚠️ 1</span>
+      </div>
+      <div class="sb-item" onclick="navigate('marks',this)" data-page="marks">
+        <span class="sb-icon">📊</span><span class="sb-label">Marks & Results</span>
+      </div>
+      <div class="sb-item" onclick="navigate('timetable',this)" data-page="timetable">
+        <span class="sb-icon">📅</span><span class="sb-label">Timetable</span>
+      </div>
+      <div class="sb-item" onclick="navigate('assignments',this)" data-page="assignments">
+        <span class="sb-icon">📝</span><span class="sb-label">Assignments</span>
+        <span class="sb-badge badge-red">3</span>
+      </div>
+ 
+      <div class="sb-section">Services</div>
+      <div class="sb-item" onclick="navigate('fee',this)" data-page="fee">
+        <span class="sb-icon">💰</span><span class="sb-label">Fee Payment</span>
+        <span class="sb-badge badge-red">Due</span>
+      </div>
+      <div class="sb-item" onclick="navigate('notices',this)" data-page="notices">
+        <span class="sb-icon">🔔</span><span class="sb-label">Notices</span>
+        <span class="sb-badge badge-green">2</span>
+      </div>
+      <div class="sb-item" onclick="navigate('certificates',this)" data-page="certificates">
+        <span class="sb-icon">📜</span><span class="sb-label">Certificates</span>
+      </div>
+    </nav>
+ 
+    <div class="sb-footer">
+      <div class="sb-user" onclick="navigate('profile',document.querySelector('[data-page=profile]'))">
+        <div class="avatar">RK</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name">Ravi Kumar</div>
+          <div class="sb-user-role">22CS047 · Sec B</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+ 
+  <!-- TOPBAR -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-left">
+      <div id="sidebarToggle" onclick="toggleSidebar()" class="icon-btn" title="Toggle Sidebar">☰</div>
+      <div>
+        <div class="page-title font-display" id="pageTitle">Dashboard</div>
+        <div class="breadcrumb" id="pageCrumb">Home · Dashboard</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-bar">
+        <span class="s-icon">🔍</span>
+        <input type="text" placeholder="Search anything...">
+      </div>
+      <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme" id="themeBtn">🌙</div>
+      <div class="icon-btn" title="Notifications" onclick="showToast('You have 2 unread notices','info')">
+        🔔<span class="notif-dot"></span>
+      </div>
+      <div class="topbar-avatar" onclick="navigate('profile',document.querySelector('[data-page=profile]'))" title="Profile">RK</div>
+      <div class="icon-btn" onclick="handleLogout()" title="Sign Out" style="color:var(--red)">🚪</div>
+    </div>
+  </header>
+ 
+  <!-- MAIN -->
+  <main class="main-content" id="mainContent">
+ 
+    <!-- ═══ DASHBOARD PAGE ═══ -->
+    <div id="page-dashboard" class="page active">
+ 
+      <div class="welcome-bar">
+        <div>
+          <h2>Good morning, <span>Ravi Kumar</span> 👋</h2>
+          <p>BSc Computer Science · Semester V · Section B · <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--indigo-lt)">22CS047</span></p>
+        </div>
+        <div class="sem-chip">Even Sem 2024–25</div>
+      </div>
+ 
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-card" onclick="navigate('marks',document.querySelector('[data-page=marks]'))">
+          <div class="stat-top">
+            <div class="stat-icon-box" style="background:rgba(99,102,241,0.12)">🏆</div>
+            <span class="stat-trend" style="background:rgba(16,185,129,0.12);color:var(--green)">↑+0.12</span>
+          </div>
+          <div class="stat-label">CGPA</div>
+          <div class="stat-value font-display text-indigo">8.74</div>
+          <div class="stat-sub">Rank #12 in Class</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:87.4%;background:var(--indigo)"></div></div>
+        </div>
+        <div class="stat-card" onclick="navigate('attendance',document.querySelector('[data-page=attendance]'))">
+          <div class="stat-top">
+            <div class="stat-icon-box" style="background:rgba(16,185,129,0.12)">✅</div>
+            <span class="stat-trend" style="background:rgba(16,185,129,0.12);color:var(--green)">Good</span>
+          </div>
+          <div class="stat-label">Attendance</div>
+          <div class="stat-value font-display text-green">87%</div>
+          <div class="stat-sub">Min required: 75%</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:87%;background:var(--green)"></div></div>
+        </div>
+        <div class="stat-card" onclick="navigate('assignments',document.querySelector('[data-page=assignments]'))">
+          <div class="stat-top">
+            <div class="stat-icon-box" style="background:rgba(245,158,11,0.12)">📝</div>
+            <span class="stat-trend" style="background:rgba(239,68,68,0.12);color:var(--red)">Due Soon</span>
+          </div>
+          <div class="stat-label">Pending Tasks</div>
+          <div class="stat-value font-display text-amber">3</div>
+          <div class="stat-sub">2 due this week</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:40%;background:var(--amber)"></div></div>
+        </div>
+        <div class="stat-card" onclick="navigate('fee',document.querySelector('[data-page=fee]'))">
+          <div class="stat-top">
+            <div class="stat-icon-box" style="background:rgba(239,68,68,0.12)">💳</div>
+            <span class="stat-trend" style="background:rgba(239,68,68,0.12);color:var(--red)">Due</span>
+          </div>
+          <div class="stat-label">Fee Balance</div>
+          <div class="stat-value font-display text-red">₹4,200</div>
+          <div class="stat-sub">Due: 15 Apr 2025</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:35%;background:var(--red)"></div></div>
+        </div>
+      </div>
+ 
+      <!-- ATTENDANCE + SCHEDULE -->
+      <div class="grid-6-4">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">📋</span> Attendance Overview</div>
+            <span class="card-action" onclick="navigate('attendance',document.querySelector('[data-page=attendance]'))">View Full Report →</span>
+          </div>
+          <div class="card-body">
+            <div class="donut-wrap">
+              <div class="donut-rel">
+                <svg class="donut-svg" viewBox="0 0 100 100">
+                  <circle class="donut-track" cx="50" cy="50" r="38" transform="rotate(-90 50 50)"/>
+                  <circle class="donut-fill" cx="50" cy="50" r="38"
+                    stroke="#10b981" stroke-dasharray="238.76" stroke-dashoffset="31"
+                    transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-pct text-green">87%</span>
+                  <span class="donut-sub-lbl">Overall</span>
+                </div>
+              </div>
+              <div class="attend-rows">
+                <div class="att-row">
+                  <span class="att-name">Data Structures</span>
+                  <div class="att-bar"><div class="att-fill" style="width:92%;background:var(--green)"></div></div>
+                  <span class="att-pct text-green">92%</span>
+                </div>
+                <div class="att-row">
+                  <span class="att-name">Database Mgmt</span>
+                  <div class="att-bar"><div class="att-fill" style="width:85%;background:var(--amber)"></div></div>
+                  <span class="att-pct text-amber">85%</span>
+                </div>
+                <div class="att-row">
+                  <span class="att-name">Operating Sys.</span>
+                  <div class="att-bar"><div class="att-fill" style="width:78%;background:var(--amber)"></div></div>
+                  <span class="att-pct text-amber">78%</span>
+                </div>
+                <div class="att-row">
+                  <span class="att-name">Web Technology</span>
+                  <div class="att-bar"><div class="att-fill" style="width:91%;background:var(--green)"></div></div>
+                  <span class="att-pct text-green">91%</span>
+                </div>
+                <div class="att-row">
+                  <span class="att-name">Python Prog.</span>
+                  <div class="att-bar"><div class="att-fill" style="width:72%;background:var(--red)"></div></div>
+                  <span class="att-pct text-red">72% ⚠️</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">📅</span> Today</div>
+            <span class="card-action" onclick="navigate('timetable',document.querySelector('[data-page=timetable]'))">Full →</span>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="tl-item">
+                <span class="tl-time">08:30</span>
+                <div class="tl-dot" style="color:var(--green)"></div>
+                <div class="tl-body">
+                  <div class="tl-sub">Data Structures</div>
+                  <div class="tl-loc">Rm 204 · Dr. Annamalai</div>
+                  <span class="tl-tag tag-done">✓ Done</span>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-time">10:30</span>
+                <div class="tl-dot" style="color:var(--amber)"></div>
+                <div class="tl-body">
+                  <div class="tl-sub">DBMS Lab</div>
+                  <div class="tl-loc">Lab 3 · Ms. Priya</div>
+                  <span class="tl-tag tag-now">⚡ Now</span>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-time">12:30</span>
+                <div class="tl-dot" style="color:var(--cyan)"></div>
+                <div class="tl-body">
+                  <div class="tl-sub">Lunch Break</div>
+                  <div class="tl-loc">Cafeteria</div>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-time">14:00</span>
+                <div class="tl-dot" style="color:var(--indigo)"></div>
+                <div class="tl-body">
+                  <div class="tl-sub">Operating Systems</div>
+                  <div class="tl-loc">Rm 301 · Mr. Selvam</div>
+                  <span class="tl-tag tag-soon">⬆ Soon</span>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-time">15:30</span>
+                <div class="tl-dot" style="color:var(--text3)"></div>
+                <div class="tl-body">
+                  <div class="tl-sub">Python Prog.</div>
+                  <div class="tl-loc">Rm 102 · Ms. Kavitha</div>
+                  <span class="tl-tag tag-next">Later</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- MARKS + NOTICES -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">📊</span> CIA Marks</div>
+            <span class="card-action" onclick="navigate('marks',document.querySelector('[data-page=marks]'))">Detailed →</span>
+          </div>
+          <div class="card-body" style="padding:0 22px">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Subject</th><th>CIA I</th><th>CIA II</th><th>Grade</th><th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Data Structures</td><td>47</td><td>45</td><td><span class="grade-badge" style="background:rgba(16,185,129,0.12);color:var(--green)">A+</span></td><td><div class="mini-prog"><div class="mini-prog-track"><div class="mini-prog-fill" style="width:92%;background:var(--green)"></div></div></div></td></tr>
+                <tr><td>DBMS</td><td>42</td><td>43</td><td><span class="grade-badge" style="background:rgba(245,158,11,0.12);color:var(--amber-lt)">A</span></td><td><div class="mini-prog"><div class="mini-prog-track"><div class="mini-prog-fill" style="width:85%;background:var(--amber)"></div></div></div></td></tr>
+                <tr><td>OS</td><td>38</td><td>40</td><td><span class="grade-badge" style="background:rgba(245,158,11,0.12);color:var(--amber-lt)">B+</span></td><td><div class="mini-prog"><div class="mini-prog-track"><div class="mini-prog-fill" style="width:78%;background:var(--amber)"></div></div></div></td></tr>
+                <tr><td>Web Tech</td><td>48</td><td>47</td><td><span class="grade-badge" style="background:rgba(99,102,241,0.12);color:var(--indigo-lt)">O</span></td><td><div class="mini-prog"><div class="mini-prog-track"><div class="mini-prog-fill" style="width:95%;background:var(--indigo)"></div></div></div></td></tr>
+                <tr><td>Python</td><td>35</td><td>38</td><td><span class="grade-badge" style="background:rgba(6,182,212,0.12);color:var(--cyan)">B</span></td><td><div class="mini-prog"><div class="mini-prog-track"><div class="mini-prog-fill" style="width:73%;background:var(--cyan)"></div></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">🔔</span> Notices</div>
+            <span class="card-action" onclick="navigate('notices',document.querySelector('[data-page=notices]'))">All →</span>
+          </div>
+          <div class="card-body">
+            <div class="notice-item">
+              <div class="notice-meta">
+                <div class="notice-unread"><div class="unread-dot"></div><span class="n-tag" style="background:rgba(239,68,68,0.1);color:var(--red)">Exam</span></div>
+                <span class="n-date">04 Apr 2025</span>
+              </div>
+              <div class="notice-title">End Semester Exam Schedule Released</div>
+              <div class="notice-desc">Exams begin May 5th. Download hall ticket from portal.</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-meta">
+                <div class="notice-unread"><div class="unread-dot"></div><span class="n-tag" style="background:rgba(245,158,11,0.1);color:var(--amber-lt)">Fee</span></div>
+                <span class="n-date">01 Apr 2025</span>
+              </div>
+              <div class="notice-title">Fee Payment Reminder</div>
+              <div class="notice-desc">Last date without fine: April 15, 2025.</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-meta">
+                <span class="n-tag" style="background:rgba(6,182,212,0.1);color:var(--cyan)">Event</span>
+                <span class="n-date">30 Mar 2025</span>
+              </div>
+              <div class="notice-title">TechVista Symposium 2025</div>
+              <div class="notice-desc">Registrations open. Paper presentation, coding & quiz.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- CGPA + QUICK ACCESS -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">📈</span> CGPA Trend</div>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom:16px;display:flex;align-items:baseline;gap:10px">
+              <span class="font-display" style="font-size:36px;font-weight:800;color:var(--amber-lt)">8.74</span>
+              <span class="text-green fw-600" style="font-size:14px">↑ Improving Consistently</span>
+            </div>
+            <div class="cgpa-chart">
+              <div class="cgpa-bars-row" id="cgpaBars"></div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px">
+                <span style="font-size:10px;color:var(--text3)">← Sem I</span>
+                <span style="font-size:10px;color:var(--text3)">Sem V (Current) →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="ct-icon">⚡</span> Quick Access</div>
+          </div>
+          <div class="card-body">
+            <div class="quick-grid">
+              <div class="quick-item" onclick="showToast('Opening Hall Ticket...','info')">
+                <span class="qi-icon">🪪</span><span class="qi-label">Hall Ticket</span>
+              </div>
+              <div class="quick-item" onclick="navigate('fee',document.querySelector('[data-page=fee]'))">
+                <span class="qi-icon">💰</span><span class="qi-label">Pay Fees</span>
+              </div>
+              <div class="quick-item" onclick="navigate('certificates',document.querySelector('[data-page=certificates]'))">
+                <span class="qi-icon">📜</span><span class="qi-label">Bonafide</span>
+              </div>
+              <div class="quick-item" onclick="navigate('marks',document.querySelector('[data-page=marks]'))">
+                <span class="qi-icon">🏆</span><span class="qi-label">Rank Card</span>
+              </div>
+              <div class="quick-item" onclick="navigate('assignments',document.querySelector('[data-page=assignments]'))">
+                <span class="qi-icon">📝</span><span class="qi-label">Assignments</span>
+              </div>
+              <div class="quick-item" onclick="showToast('Library portal opening...','info')">
+                <span class="qi-icon">📚</span><span class="qi-label">Library</span>
+              </div>
+              <div class="quick-item" onclick="navigate('timetable',document.querySelector('[data-page=timetable]'))">
+                <span class="qi-icon">📅</span><span class="qi-label">Timetable</span>
+              </div>
+              <div class="quick-item" onclick="showToast('Bus pass feature coming soon','info')">
+                <span class="qi-icon">🚌</span><span class="qi-label">Bus Pass</span>
+              </div>
+              <div class="quick-item" onclick="showToast('Support ticket raised ✓','success')">
+                <span class="qi-icon">🛟</span><span class="qi-label">Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ═══ ATTENDANCE PAGE ═══ -->
+    <div id="page-attendance" class="page">
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">📋</span> Attendance Details — Semester V</div>
+          <span class="card-action" onclick="showToast('Report downloaded as PDF','success')">⬇ Download Report</span>
+        </div>
+        <div class="card-body" style="padding:0 22px">
+          <table class="data-table">
+            <thead>
+              <tr><th>Subject</th><th>Faculty</th><th>Held</th><th>Present</th><th>Absent</th><th>%</th><th>Status</th></tr>
+            </thead>
+            <tbody id="attendanceTable"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">⚠️</span> Shortage Alert</div>
+        </div>
+        <div class="card-body">
+          <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:18px 20px;display:flex;gap:14px;align-items:flex-start">
+            <span style="font-size:22px">🚨</span>
+            <div>
+              <div style="font-weight:700;font-size:15px;margin-bottom:4px">Python Programming — Low Attendance (72%)</div>
+              <div style="font-size:13px;color:var(--text2);line-height:1.6">You need to attend at least <strong style="color:var(--red)">8 more classes</strong> to reach the mandatory 75% threshold. Next class: Tomorrow, 15:30, Room 102.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ═══ MARKS PAGE ═══ -->
+    <div id="page-marks" class="page">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:rgba(245,158,11,0.12);margin-bottom:12px">🏆</div>
+          <div class="stat-label">CGPA</div>
+          <div class="stat-value font-display text-amber">8.74</div>
+          <div class="stat-sub">Out of 10</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:rgba(99,102,241,0.12);margin-bottom:12px">🥇</div>
+          <div class="stat-label">Class Rank</div>
+          <div class="stat-value font-display text-indigo">#12</div>
+          <div class="stat-sub">Out of 60 students</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:rgba(16,185,129,0.12);margin-bottom:12px">📈</div>
+          <div class="stat-label">Best Subject</div>
+          <div class="stat-value font-display text-green" style="font-size:20px">Web Tech</div>
+          <div class="stat-sub">95/100 · Grade O</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:rgba(239,68,68,0.12);margin-bottom:12px">📉</div>
+          <div class="stat-label">Needs Attention</div>
+          <div class="stat-value font-display text-red" style="font-size:20px">Python</div>
+          <div class="stat-sub">73/100 · Grade B</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">📊</span> Subject-wise CIA Performance</div>
+          <span class="card-action" onclick="showToast('Marks card downloaded','success')">⬇ Download Marks Card</span>
+        </div>
+        <div class="card-body" style="padding:0 22px">
+          <table class="data-table" id="marksTable">
+            <thead>
+              <tr><th>Subject Code</th><th>Subject Name</th><th>CIA I /50</th><th>CIA II /50</th><th>Model /100</th><th>Total</th><th>Grade</th><th>Credits</th></tr>
+            </thead>
+            <tbody id="marksTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ═══ TIMETABLE PAGE ═══ -->
+    <div id="page-timetable" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">📅</span> Weekly Timetable — Semester V</div>
+          <span class="card-action" onclick="showToast('Timetable exported','success')">⬇ Export</span>
+        </div>
+        <div class="card-body" style="overflow-x:auto;padding:16px">
+          <div id="ttGrid"></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ═══ ASSIGNMENTS PAGE ═══ -->
+    <div id="page-assignments" class="page">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div>
+          <h2 class="font-display" style="font-size:22px;font-weight:800">Assignments</h2>
+          <p class="text-muted" style="font-size:13px;margin-top:4px">3 pending · 2 submitted · 1 graded</p>
+        </div>
+        <button class="btn btn-primary" onclick="showToast('Assignment uploaded successfully','success')">+ Upload Assignment</button>
+      </div>
+      <div id="assignmentList"></div>
+    </div>
+ 
+    <!-- ═══ FEE PAGE ═══ -->
+    <div id="page-fee" class="page">
+      <div class="fee-summary">
+        <div class="fee-card">
+          <div class="stat-label">Total Fee</div>
+          <div class="fee-amount font-display" style="color:var(--text1)">₹42,000</div>
+          <div class="text-muted" style="font-size:13px">Even Semester 2024–25</div>
+        </div>
+        <div class="fee-card" style="border-color:rgba(16,185,129,0.2)">
+          <div class="stat-label">Paid</div>
+          <div class="fee-amount font-display text-green">₹37,800</div>
+          <div class="text-muted" style="font-size:13px">90% of total fee</div>
+        </div>
+        <div class="fee-card" style="border-color:rgba(239,68,68,0.2)">
+          <div class="stat-label">Balance Due</div>
+          <div class="fee-amount font-display text-red">₹4,200</div>
+          <div class="text-red fw-600" style="font-size:13px">⚠ Due: 15 Apr 2025</div>
+          <button class="pay-btn" onclick="showPayModal()">💳 Pay Now — ₹4,200</button>
+        </div>
+      </div>
+      <div class="card pay-history">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">📑</span> Payment History</div>
+          <span class="card-action" onclick="showToast('Receipt downloaded','success')">⬇ Download All Receipts</span>
+        </div>
+        <div class="card-body" id="payHistory"></div>
+      </div>
+    </div>
+ 
+    <!-- ═══ NOTICES PAGE ═══ -->
+    <div id="page-notices" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">🔔</span> All Notices & Announcements</div>
+          <span class="card-action" onclick="showToast('Marked all as read','success')">Mark all read</span>
+        </div>
+        <div class="card-body" id="noticesList"></div>
+      </div>
+    </div>
+ 
+    <!-- ═══ CERTIFICATES PAGE ═══ -->
+    <div id="page-certificates" class="page">
+      <div class="grid-3">
+        <div class="card" style="cursor:pointer" onclick="showToast('Bonafide certificate request submitted','success')">
+          <div class="card-body" style="text-align:center;padding:32px 20px">
+            <div style="font-size:40px;margin-bottom:14px">📋</div>
+            <div class="font-display fw-700" style="font-size:16px;margin-bottom:6px">Bonafide Certificate</div>
+            <div class="text-muted" style="font-size:13px;margin-bottom:16px">For bank, passport, scholarship purposes</div>
+            <button class="btn btn-primary" style="width:100%">Request Certificate</button>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onclick="showToast('Transfer Certificate request submitted','success')">
+          <div class="card-body" style="text-align:center;padding:32px 20px">
+            <div style="font-size:40px;margin-bottom:14px">🎓</div>
+            <div class="font-display fw-700" style="font-size:16px;margin-bottom:6px">Transfer Certificate</div>
+            <div class="text-muted" style="font-size:13px;margin-bottom:16px">For transfer to other institutions</div>
+            <button class="btn btn-outline" style="width:100%">Request TC</button>
+          </div>
+        </div>
+        <div class="card" style="cursor:pointer" onclick="showToast('Character Certificate request submitted','success')">
+          <div class="card-body" style="text-align:center;padding:32px 20px">
+            <div style="font-size:40px;margin-bottom:14px">🏅</div>
+            <div class="font-display fw-700" style="font-size:16px;margin-bottom:6px">Character Certificate</div>
+            <div class="text-muted" style="font-size:13px;margin-bottom:16px">For employment & higher education</div>
+            <button class="btn btn-outline" style="width:100%">Request Certificate</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ct-icon">📁</span> Certificate History</div>
+        </div>
+        <div class="card-body">
+          <div class="ph-row">
+            <div class="ph-left">
+              <div class="ph-icon">📋</div>
+              <div><div class="ph-name">Bonafide Certificate</div><div class="ph-date">15 Jan 2025 · REF/BC/2025/001</div></div>
+            </div>
+            <div><span class="ph-status" style="background:rgba(16,185,129,0.12);color:var(--green)">✓ Issued</span></div>
+          </div>
+          <div class="ph-row">
+            <div class="ph-left">
+              <div class="ph-icon">📋</div>
+              <div><div class="ph-name">Bonafide Certificate</div><div class="ph-date">03 Sep 2024 · REF/BC/2024/089</div></div>
+            </div>
+            <div><span class="ph-status" style="background:rgba(16,185,129,0.12);color:var(--green)">✓ Issued</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ═══ PROFILE PAGE ═══ -->
+    <div id="page-profile" class="page">
+      <div class="profile-hero">
+        <div class="profile-avatar">RK</div>
+        <div class="profile-info">
+          <h2>Ravi Kumar S</h2>
+          <p>BSc Computer Science · Semester V · Section B</p>
+          <div class="profile-tags">
+            <span class="p-tag">Roll: 22CS047</span>
+            <span class="p-tag">Reg: 221CS047023</span>
+            <span class="p-tag">KVN College, Namakkal</span>
+            <span class="p-tag" style="background:rgba(16,185,129,0.12);color:var(--green);border-color:rgba(16,185,129,0.2)">✓ Active Student</span>
+          </div>
+        </div>
+        <button class="btn btn-outline" style="align-self:flex-start;margin-left:auto" onclick="showToast('Profile edit feature — coming soon','info')">✏️ Edit Profile</button>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ct-icon">👤</span> Personal Information</div></div>
+          <div class="card-body">
+            <div class="info-grid">
+              <div class="info-row"><div class="info-lbl">Full Name</div><div class="info-val">Ravi Kumar S</div></div>
+              <div class="info-row"><div class="info-lbl">Date of Birth</div><div class="info-val">12 Aug 2004</div></div>
+              <div class="info-row"><div class="info-lbl">Gender</div><div class="info-val">Male</div></div>
+              <div class="info-row"><div class="info-lbl">Blood Group</div><div class="info-val">O+</div></div>
+              <div class="info-row"><div class="info-lbl">Mobile</div><div class="info-val">+91 98765 43210</div></div>
+              <div class="info-row"><div class="info-lbl">Email</div><div class="info-val truncate">ravikumar@kvncollege.edu.in</div></div>
+              <div class="info-row" style="grid-column:span 2"><div class="info-lbl">Address</div><div class="info-val">123, Gandhi Nagar, Namakkal, Tamil Nadu — 637001</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ct-icon">🎓</span> Academic Information</div></div>
+          <div class="card-body">
+            <div class="info-grid">
+              <div class="info-row"><div class="info-lbl">Roll Number</div><div class="info-val font-mono">22CS047</div></div>
+              <div class="info-row"><div class="info-lbl">Reg. Number</div><div class="info-val font-mono">221CS047023</div></div>
+              <div class="info-row"><div class="info-lbl">Department</div><div class="info-val">Computer Science</div></div>
+              <div class="info-row"><div class="info-lbl">Programme</div><div class="info-val">BSc (Computer Sci.)</div></div>
+              <div class="info-row"><div class="info-lbl">Semester</div><div class="info-val">V (Even 2024–25)</div></div>
+              <div class="info-row"><div class="info-lbl">Section</div><div class="info-val">B</div></div>
+              <div class="info-row"><div class="info-lbl">Advisor</div><div class="info-val">Dr. M. Annamalai</div></div>
+              <div class="info-row"><div class="info-lbl">Affiliation</div><div class="info-val">Periyar University</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+  </main>
+</div>
+ 
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+ 
+<!-- MODAL CONTAINER -->
+<div id="modalContainer"></div>
+ 
+<script>
+/* ═══════════════════════════════════════════════
+   PARTICLES
+═══════════════════════════════════════════════ */
+(function(){
+  const c = document.getElementById('loginCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  class Pt {
+    constructor(){
+      this.x = Math.random()*W; this.y = Math.random()*H;
+      this.vx = (Math.random()-.5)*0.4; this.vy = (Math.random()-.5)*0.4;
+      this.r = Math.random()*1.5+0.5;
+      this.a = Math.random();
+    }
+    update(){ this.x+=this.vx; this.y+=this.vy;
+      if(this.x<0||this.x>W) this.vx*=-1;
+      if(this.y<0||this.y>H) this.vy*=-1;
+    }
+    draw(){
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(99,102,241,${this.a*0.5})`; ctx.fill();
+    }
+  }
+  for(let i=0;i<70;i++) pts.push(new Pt());
+  function line(a,b,d){
+    const op = Math.max(0,1-d/140)*0.15;
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle=`rgba(99,102,241,${op})`; ctx.lineWidth=0.8; ctx.stroke();
+  }
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>p.update());
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+      const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+      if(d<140) line(pts[i],pts[j],d);
+    }
+    pts.forEach(p=>p.draw());
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+ 
+/* ═══════════════════════════════════════════════
+   LOGIN LOGIC
+═══════════════════════════════════════════════ */
+let currentRole = 'student';
+function setRole(el, role){
+  document.querySelectorAll('.role-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active'); currentRole = role;
+}
+function fillDemo(u,p){
+  document.getElementById('loginUser').value=u;
+  document.getElementById('loginPass').value=p;
+  showToast('Demo credentials filled!','info');
+}
+function togglePassword(){
+  const i=document.getElementById('loginPass');
+  const b=document.getElementById('togglePass');
+  if(i.type==='password'){i.type='text';b.textContent='🔓';}
+  else{i.type='password';b.textContent='🔒';}
+}
+function handleLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  let valid=true;
+  document.getElementById('userErr').classList.remove('show');
+  document.getElementById('passErr').classList.remove('show');
+  document.getElementById('loginUser').classList.remove('error');
+  document.getElementById('loginPass').classList.remove('error');
+  if(!u){ document.getElementById('userErr').classList.add('show'); document.getElementById('loginUser').classList.add('error'); valid=false; }
+  if(p.length<4){ document.getElementById('passErr').classList.add('show'); document.getElementById('loginPass').classList.add('error'); valid=false; }
+  if(!valid) return;
+  const btn=document.getElementById('loginBtn');
+  btn.classList.add('loading');
+  setTimeout(()=>{
+    btn.classList.remove('loading');
+    launchApp();
+  },1800);
+}
+function launchApp(){
+  const lp=document.getElementById('loginPage');
+  lp.style.transition='opacity 0.5s ease,transform 0.5s ease';
+  lp.style.opacity='0'; lp.style.transform='scale(0.96)';
+  setTimeout(()=>{
+    lp.style.display='none';
+    document.getElementById('appShell').classList.add('visible');
+    buildAll();
+    showToast('Welcome back, Ravi Kumar! 🎓','success');
+  },500);
+}
+function handleLogout(){
+  showModal('Confirm Logout','Are you sure you want to sign out of EduPortal?',[
+    {label:'Cancel',cls:'btn-outline',action:()=>closeModal()},
+    {label:'Sign Out',cls:'btn-primary',action:()=>{
+      closeModal();
+      const app=document.getElementById('appShell');
+      app.style.transition='opacity 0.4s ease';app.style.opacity='0';
+      setTimeout(()=>{
+        app.classList.remove('visible'); app.style.opacity='';
+        document.getElementById('loginPage').style.display='';
+        document.getElementById('loginPage').style.opacity='1';
+        document.getElementById('loginPage').style.transform='';
+        document.getElementById('loginUser').value='';
+        document.getElementById('loginPass').value='';
+      },400);
+    }}
+  ]);
+}
+function showForgotModal(){
+  showModal('Reset Password',`
+    <div class="form-group">
+      <label class="form-label">Registered Roll Number / Email</label>
+      <input class="form-input" type="text" placeholder="e.g. 22CS047" style="margin-top:4px">
+    </div>
+  `,[
+    {label:'Cancel',cls:'btn-outline',action:()=>closeModal()},
+    {label:'Send Reset Link',cls:'btn-primary',action:()=>{closeModal();showToast('Reset link sent to your registered email','success');}}
+  ]);
+}
+ 
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+const pageMeta={
+  dashboard:{title:'Dashboard',crumb:'Home · Dashboard'},
+  attendance:{title:'Attendance',crumb:'Academic · Attendance'},
+  marks:{title:'Marks & Results',crumb:'Academic · Marks'},
+  timetable:{title:'Timetable',crumb:'Academic · Timetable'},
+  assignments:{title:'Assignments',crumb:'Academic · Assignments'},
+  fee:{title:'Fee Payment',crumb:'Services · Fee Payment'},
+  notices:{title:'Notices',crumb:'Services · Notices'},
+  certificates:{title:'Certificates',crumb:'Services · Certificates'},
+  profile:{title:'My Profile',crumb:'Account · Profile'},
+};
+function navigate(page, navEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const pg=document.getElementById('page-'+page);
+  if(pg) pg.classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  const meta=pageMeta[page]||{title:page,crumb:'Home · '+page};
+  document.getElementById('pageTitle').textContent=meta.title;
+  document.getElementById('pageCrumb').textContent=meta.crumb;
+}
+let sidebarCollapsed=false;
+function toggleSidebar(){
+  sidebarCollapsed=!sidebarCollapsed;
+  const sb=document.getElementById('sidebar');
+  const tb=document.getElementById('topbar');
+  const mc=document.getElementById('mainContent');
+  if(sidebarCollapsed){ sb.classList.add('collapsed'); tb.classList.add('collapsed'); mc.classList.add('collapsed'); }
+  else{ sb.classList.remove('collapsed'); tb.classList.remove('collapsed'); mc.classList.remove('collapsed'); }
+}
+ 
+/* ═══════════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════════ */
+let isDark=true;
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  document.getElementById('themeBtn').textContent=isDark?'🌙':'☀️';
+  showToast(isDark?'Dark mode enabled':'Light mode enabled','info');
+}
+ 
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function showToast(msg,type='info'){
+  const icons={success:'✅',error:'❌',info:'ℹ️',warning:'⚠️'};
+  const tc=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span class="toast-icon">${icons[type]||'ℹ️'}</span><span>${msg}</span><span class="toast-close" onclick="this.parentElement.remove()">✕</span>`;
+  tc.appendChild(t);
+  setTimeout(()=>t.style.cssText='opacity:0;transform:translateX(100%);transition:all 0.3s ease',3200);
+  setTimeout(()=>t.remove(),3600);
+}
+ 
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+function showModal(title,body,buttons){
+  closeModal();
+  const mc=document.getElementById('modalContainer');
+  const btns=buttons.map(b=>`<button class="btn ${b.cls}" id="mbtn${Math.random().toString(36).slice(2)}">${b.label}</button>`).join('');
+  mc.innerHTML=`<div class="modal-overlay"><div class="modal">
+    <div class="modal-title">${title}</div>
+    <div class="modal-sub" id="modalBodyWrap"></div>
+    <div class="modal-footer">${btns}</div>
+  </div></div>`;
+  document.getElementById('modalBodyWrap').innerHTML=body;
+  const btnEls=mc.querySelectorAll('.btn');
+  btnEls.forEach((el,i)=>el.addEventListener('click',buttons[i].action));
+}
+function closeModal(){ document.getElementById('modalContainer').innerHTML=''; }
+function showPayModal(){
+  showModal('Complete Fee Payment',`
+    <p style="margin-bottom:20px;color:var(--text2);font-size:13px">You are about to pay <strong style="color:var(--text1)">₹4,200</strong> towards your semester fee balance.</p>
+    <div class="form-group">
+      <label class="form-label">Payment Method</label>
+      <select class="form-input" style="margin-top:4px">
+        <option>UPI / GPay / PhonePe</option>
+        <option>Net Banking</option>
+        <option>Debit / Credit Card</option>
+        <option>Demand Draft</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">UPI ID / Reference</label>
+      <input class="form-input" type="text" placeholder="yourname@upi" style="margin-top:4px">
+    </div>
+  `,[
+    {label:'Cancel',cls:'btn-outline',action:()=>closeModal()},
+    {label:'💳 Pay ₹4,200',cls:'btn-primary',action:()=>{
+      closeModal();
+      showToast('Payment of ₹4,200 initiated successfully! ✓','success');
+      setTimeout(()=>showToast('You will receive a receipt on your registered email','info'),1200);
+    }}
+  ]);
+}
+ 
+/* ═══════════════════════════════════════════════
+   DATA BUILDERS
+═══════════════════════════════════════════════ */
+function buildAll(){
+  buildCGPABars();
+  buildAttendanceTable();
+  buildMarksTable();
+  buildTimetable();
+  buildAssignments();
+  buildPayHistory();
+  buildNotices();
+}
+ 
+function buildCGPABars(){
+  const data=[{s:'I',v:7.9},{s:'II',v:8.2},{s:'III',v:8.4},{s:'IV',v:8.62},{s:'V',v:8.74}];
+  const c=document.getElementById('cgpaBars'); c.innerHTML='';
+  data.forEach((d,i)=>{
+    const h=(d.v/10)*85;
+    const col=document.createElement('div'); col.className='cgpa-bar-col';
+    col.innerHTML=`<span class="cgpa-val">${d.v}</span>
+      <div class="cgpa-bar ${i===4?'current':''}" style="height:${h}px" title="Sem ${d.s}: ${d.v}"></div>
+      <span class="cgpa-sem">S${d.s}</span>`;
+    c.appendChild(col);
+  });
+}
+ 
+const attendData=[
+  {sub:'Data Structures',fac:'Dr. Annamalai',held:62,pres:57},
+  {sub:'Database Management',fac:'Ms. Priya D',held:58,pres:49},
+  {sub:'Operating Systems',fac:'Mr. Selvam R',held:60,pres:47},
+  {sub:'Web Technology',fac:'Ms. Kavitha S',held:55,pres:50},
+  {sub:'Python Programming',fac:'Ms. Kavitha S',held:58,pres:42},
+  {sub:'Statistics',fac:'Dr. Murugan K',held:50,pres:44},
+];
+function buildAttendanceTable(){
+  const tb=document.getElementById('attendanceTable'); if(!tb) return;
+  tb.innerHTML=attendData.map(d=>{
+    const pct=Math.round(d.pres/d.held*100);
+    const ab=d.held-d.pres;
+    const color=pct>=85?'var(--green)':pct>=75?'var(--amber)':'var(--red)';
+    const status=pct>=85?`<span class="grade-badge" style="background:rgba(16,185,129,0.1);color:var(--green)">Good</span>`:
+      pct>=75?`<span class="grade-badge" style="background:rgba(245,158,11,0.1);color:var(--amber-lt)">OK</span>`:
+      `<span class="grade-badge" style="background:rgba(239,68,68,0.1);color:var(--red)">⚠ Low</span>`;
+    return `<tr><td>${d.sub}</td><td class="text-muted">${d.fac}</td><td>${d.held}</td><td>${d.pres}</td><td>${ab}</td>
+      <td><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${color}">${pct}%</span></td>
+      <td>${status}</td></tr>`;
+  }).join('');
+}
+ 
+const marksData=[
+  {code:'23CS501',sub:'Data Structures & Algorithms',c1:47,c2:45,model:88,cred:5},
+  {code:'23CS502',sub:'Database Management Systems',c1:42,c2:43,model:79,cred:4},
+  {code:'23CS503',sub:'Operating Systems',c1:38,c2:40,model:76,cred:4},
+  {code:'23CS504',sub:'Web Technology',c1:48,c2:47,model:92,cred:5},
+  {code:'23CS505',sub:'Python Programming',c1:35,c2:38,model:69,cred:3},
+  {code:'23CS506',sub:'Statistics & Probability',c1:44,c2:43,model:84,cred:3},
+];
+function getGrade(t){ if(t>=90)return['O','var(--indigo-lt)','rgba(99,102,241,0.12)']; if(t>=80)return['A+','var(--green)','rgba(16,185,129,0.1)']; if(t>=70)return['A','var(--amber-lt)','rgba(245,158,11,0.1)']; if(t>=60)return['B+','var(--cyan)','rgba(6,182,212,0.1)']; return['B','var(--text2)','rgba(255,255,255,0.06)']; }
+function buildMarksTable(){
+  const tb=document.getElementById('marksTableBody'); if(!tb) return;
+  tb.innerHTML=marksData.map(d=>{
+    const tot=Math.round((d.c1+d.c2)/100*40 + d.model*0.6);
+    const [g,gc,gbg]=getGrade(tot);
+    return `<tr>
+      <td class="font-mono" style="font-size:12px;color:var(--text2)">${d.code}</td>
+      <td>${d.sub}</td><td>${d.c1}/50</td><td>${d.c2}/50</td><td>${d.model}/100</td>
+      <td class="fw-700 font-mono">${tot}/100</td>
+      <td><span class="grade-badge" style="background:${gbg};color:${gc}">${g}</span></td>
+      <td>${d.cred}</td>
+    </tr>`;
+  }).join('');
+}
+ 
+function buildTimetable(){
+  const g=document.getElementById('ttGrid'); if(!g) return;
+  const days=['Mon','Tue','Wed','Thu','Fri'];
+  const slots=['08:30–09:20','09:20–10:10','10:10–11:00','BREAK','11:15–12:05','12:05–12:55','LUNCH','14:00–14:50','14:50–15:40','15:40–16:30'];
+  const colors={'DS':'#6366f1','DBMS':'#10b981','OS':'#f59e0b','WT':'#06b6d4','PY':'#ec4899','STA':'#8b5cf6'};
+  const tt={
+    Mon:['DS','DBMS','OS',null,'WT','PY',null,'STA','DS',''],
+    Tue:['WT','OS','DS',null,'PY','STA',null,'DBMS','',''],
+    Wed:['DBMS LAB','DBMS LAB','DBMS LAB',null,'STA','OS',null,'','WT',''],
+    Thu:['PY','STA','WT',null,'DS','DBMS',null,'OS','','PY LAB'],
+    Fri:['OS','DS','PY',null,'DBMS','WT',null,'STA','',''],
+  };
+  const rooms={DS:'Rm 204',DBMS:'Rm 301',OS:'Rm 301',WT:'Rm 102',PY:'Rm 102',STA:'Rm 205','DBMS LAB':'Lab 3','PY LAB':'Lab 2'};
+  let html=`<div style="display:grid;grid-template-columns:90px repeat(${days.length},1fr);">`;
+  html+=`<div class="tt-head">Time</div>`;
+  days.forEach(d=>html+=`<div class="tt-head" style="text-align:center">${d}</div>`);
+  slots.forEach((sl,si)=>{
+    const isBreak=sl==='BREAK'||sl==='LUNCH';
+    html+=`<div class="tt-time">${sl}</div>`;
+    days.forEach(day=>{
+      const val=(tt[day]||[])[si]||'';
+      if(isBreak){
+        html+=`<div class="tt-cell break"><div class="tt-break-label">${sl}</div></div>`;
+      } else if(val){
+        const base=val.replace(' LAB','');
+        const col=colors[base]||'#6366f1';
+        html+=`<div class="tt-cell"><div class="tt-cell-inner" style="border-color:${col}">
+          <div class="tt-sub" style="color:${col}">${val}</div>
+          <div class="tt-room">${rooms[val]||''}</div>
+        </div></div>`;
+      } else { html+=`<div class="tt-cell"></div>`; }
+    });
+  });
+  html+='</div>';
+  g.innerHTML=html;
+}
+ 
+const assigns=[
+  {title:'Implement AVL Tree with Balancing Operations',sub:'Data Structures',due:'08 Apr 2025',progress:60,urgent:true,done:false},
+  {title:'ER Diagram & SQL Queries for Hospital Database',sub:'DBMS',due:'10 Apr 2025',progress:30,urgent:true,done:false},
+  {title:'File System Simulation using C',sub:'Operating Systems',due:'14 Apr 2025',progress:0,urgent:false,done:false},
+  {title:'Responsive Portfolio Website using HTML/CSS/JS',sub:'Web Technology',due:'25 Mar 2025',progress:100,urgent:false,done:true},
+  {title:'Python Script for Data Visualization using Matplotlib',sub:'Python Prog.',due:'20 Mar 2025',progress:100,urgent:false,done:true},
+];
+function buildAssignments(){
+  const al=document.getElementById('assignmentList'); if(!al) return;
+  al.innerHTML=assigns.map((a,i)=>`
+    <div class="assign-card" onclick="">
+      <div class="assign-check ${a.done?'done':''}" onclick="toggleAssign(event,${i})" id="ac${i}">${a.done?'✓':''}</div>
+      <div class="assign-body">
+        <div class="assign-title" style="${a.done?'text-decoration:line-through;opacity:0.5':''}">${a.title}</div>
+        <div class="assign-meta">
+          <span>📚 ${a.sub}</span>
+          <span>👨‍🏫 KVN Faculty</span>
+          <span style="font-family:'JetBrains Mono',monospace">Due: ${a.due}</span>
+        </div>
+        ${a.progress<100?`<div class="assign-progress">
+          <div class="assign-prog-bar"><div class="assign-prog-fill" style="width:${a.progress}%;background:${a.urgent?'var(--red)':'var(--indigo)'}"></div></div>
+          <span style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2)">${a.progress}%</span>
+        </div>`:''}
+      </div>
+      <span class="assign-due ${a.urgent&&!a.done?'due-urgent':a.done?'due-ok':'due-soon'}">${a.done?'✓ Submitted':a.urgent?'Urgent':'On Track'}</span>
+    </div>`).join('');
+}
+function toggleAssign(e,i){
+  e.stopPropagation();
+  assigns[i].done=!assigns[i].done;
+  if(assigns[i].done) assigns[i].progress=100;
+  buildAssignments();
+  showToast(assigns[i].done?'Assignment marked as submitted ✓':'Marked as pending','success');
+}
+ 
+const payHist=[
+  {name:'Tuition Fee – Q3',date:'15 Jan 2025',ref:'TXN/2025/00142',amt:'₹12,000',paid:true},
+  {name:'Tuition Fee – Q2',date:'10 Oct 2024',ref:'TXN/2024/00891',amt:'₹12,000',paid:true},
+  {name:'Tuition Fee – Q1',date:'05 Jul 2024',ref:'TXN/2024/00423',amt:'₹13,800',paid:true},
+  {name:'Semester Registration',date:'01 Jun 2024',ref:'TXN/2024/00201',amt:'₹2,500',paid:true},
+  {name:'Lab Fee',date:'01 Jun 2024',ref:'TXN/2024/00202',amt:'₹1,500',paid:true},
+];
+function buildPayHistory(){
+  const ph=document.getElementById('payHistory'); if(!ph) return;
+  ph.innerHTML=payHist.map(p=>`
+    <div class="ph-row" onclick="showToast('Receipt for ${p.ref} downloaded','success')">
+      <div class="ph-left">
+        <div class="ph-icon">💳</div>
+        <div>
+          <div class="ph-name">${p.name}</div>
+          <div class="ph-date">${p.date} · <span class="font-mono">${p.ref}</span></div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="ph-amount font-display">${p.amt}</div>
+        <span class="ph-status" style="background:rgba(16,185,129,0.1);color:var(--green)">✓ Paid</span>
+      </div>
+    </div>`).join('');
+}
+ 
+const noticesData=[
+  {tag:'Exam',tagColor:'var(--red)',tagBg:'rgba(239,68,68,0.1)',date:'04 Apr 2025',title:'End Semester Exam Schedule Released',desc:'The schedule for the Even Semester 2024–25 examinations has been released. Exams begin from May 5th, 2025. Students are advised to download their hall tickets from the portal at least 3 days before the exam.',unread:true},
+  {tag:'Fee',tagColor:'var(--amber-lt)',tagBg:'rgba(245,158,11,0.1)',date:'01 Apr 2025',title:'Semester Fee Payment — Last Date Reminder',desc:'The last date for fee payment without fine is April 15, 2025. A fine of ₹50/day will be levied after the due date. Please contact the accounts office for assistance.',unread:true},
+  {tag:'Event',tagColor:'var(--cyan)',tagBg:'rgba(6,182,212,0.1)',date:'30 Mar 2025',title:'TechVista 2025 — Technical Symposium',desc:'Registrations are now open for TechVista 2025. Events include paper presentation, competitive coding, UI/UX design, quiz, and project expo. Register by April 10.',unread:false},
+  {tag:'Library',tagColor:'var(--green)',tagBg:'rgba(16,185,129,0.1)',date:'28 Mar 2025',title:'New Books Added to Digital Library',desc:'Over 60 new titles across Computer Science, Mathematics, and Applied Sciences have been added to the digital library this month. Access via e-library.kvncollege.ac.in.',unread:false},
+  {tag:'Holiday',tagColor:'var(--pink)',tagBg:'rgba(236,72,153,0.1)',date:'24 Mar 2025',title:'College Holiday — Tamil New Year',desc:'The college will remain closed on April 14, 2025 on account of Tamil New Year (Puthandu). Classes scheduled for that day will be compensated.',unread:false},
+];
+function buildNotices(){
+  const nl=document.getElementById('noticesList'); if(!nl) return;
+  nl.innerHTML=noticesData.map(n=>`
+    <div class="notice-item" onclick="this.querySelector('.unread-dot')&&this.querySelector('.unread-dot').remove();showToast('Notice opened','info')">
+      <div class="notice-meta">
+        <div style="display:flex;align-items:center;gap:8px">
+          ${n.unread?'<div class="unread-dot"></div>':''}
+          <span class="n-tag" style="color:${n.tagColor};background:${n.tagBg}">${n.tag}</span>
+        </div>
+        <span class="n-date">${n.date}</span>
+      </div>
+      <div class="notice-title">${n.title}</div>
+      <div class="notice-desc">${n.desc}</div>
+    </div>`).join('');
+}
+ 
+/* ═══════════════════════════════════════════════
+   KEYBOARD SHORTCUT
+═══════════════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.key==='b') toggleSidebar();
+  if(e.key==='Escape') closeModal();
+});
+ 
+/* Start */
+document.getElementById('loginUser').addEventListener('keydown',e=>e.key==='Enter'&&handleLogin());
+document.getElementById('loginPass').addEventListener('keydown',e=>e.key==='Enter'&&handleLogin());
+</script>
+</body>
+</html>
